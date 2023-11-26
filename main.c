@@ -4,7 +4,12 @@
 
 #define TAM 10
 
-struct filaIrmaos;
+typedef struct filaIrmaos
+{
+  char nomeIrmao[TAM][50];
+  int front;
+  int rear;
+} filaIrmaos;
 typedef struct Pessoa
 {
   char nome[50];
@@ -12,13 +17,6 @@ typedef struct Pessoa
   struct Pessoa *Mae;
   struct filaIrmaos *irmaos;
 } Pessoa;
-
-typedef struct filaIrmaos
-{
-  char nomeIrmao[TAM][50];
-  int front;
-  int rear;
-} filaIrmaos;
 
 Pessoa *criarNoPessoa()
 {
@@ -33,7 +31,7 @@ Pessoa *adicionarPessoa(Pessoa *pessoa)
 
   printf("\nDigite o nome da pessoa: ");
   scanf(" %s", pessoa->nome);
-  // ADICIONAR PAI E MAE
+
   // ADICIONAR PAI E MAE
   pessoa->Pai = criarNoPessoa();
   Pessoa *paiPtr = pessoa->Pai;
@@ -44,7 +42,7 @@ Pessoa *adicionarPessoa(Pessoa *pessoa)
   pessoa->Mae = criarNoPessoa();
   Pessoa *maePtr = pessoa->Mae;
 
-  printf("\nDigite o nome da mãe: ");
+  printf("\nDigite o nome da mae: ");
   scanf(" %s", maePtr->nome);
 
   // ADICIONAR IRMAOS (FILA)
@@ -55,7 +53,7 @@ Pessoa *adicionarPessoa(Pessoa *pessoa)
   int saida = 1;
   for (int i = 0; i < TAM; i++)
   {
-    printf("\n0 - Pular\n1 - Adicionar irmão: ");
+    printf("\n0 - Pular\n1 - Adicionar irmao: ");
     scanf("%d", &saida);
     if (saida == 0)
     {
@@ -80,6 +78,7 @@ void imprimirArvore(Pessoa *Pessoa)
   }
 
   // IMPRIMIR FILHOS E IRMAOS
+  printf("\n");
   printf("\nFilho(s): (%s", Pessoa->nome);
 
   filaIrmaos *irmaos = Pessoa->irmaos;
@@ -93,9 +92,15 @@ void imprimirArvore(Pessoa *Pessoa)
   printf(")");
 
   // IMPRIMIR PAI E MAE
-  printf("\nPai-> %s", Pessoa->Pai->nome);
+  if (Pessoa->Pai != NULL)
+  {
+    printf("\nPai-> %s", Pessoa->Pai->nome);
+  }
+  if (Pessoa->Mae != NULL)
+  {
+    printf("\nMae-> %s", Pessoa->Mae->nome);
+  }
   imprimirArvore(Pessoa->Pai);
-  printf("\nMae-> %s", Pessoa->Mae->nome);
   imprimirArvore(Pessoa->Mae);
 }
 
