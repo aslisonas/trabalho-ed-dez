@@ -83,7 +83,7 @@ Pessoa *encontrarUltimoNomePai(Pessoa *raiz)
     raiz = raiz->Pai;
   }
 
-  return raiz->nome;
+  return raiz;
 }
 Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
 {
@@ -97,7 +97,7 @@ Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
     raiz = raiz->Mae;
   }
 
-  return raiz->nome;
+  return raiz;
 }
 
 void imprimirArvore(Pessoa *Pessoa)
@@ -148,8 +148,8 @@ int main()
     if (cadastrouPrimeira)
     {
       printf("\n\n-- Recomendações --");
-      printf("\n8 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz));
-      printf("\n9 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz));
+      printf("\n8 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz)->nome);
+      printf("\n9 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz)->nome);
     }
 
     printf("\nDigite a opcao: ");
