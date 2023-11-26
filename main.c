@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define TAM 10
 
+struct filaIrmaos;
 typedef struct Pessoa
 {
   char nome[50];
@@ -26,15 +28,28 @@ Pessoa *criarNoPessoa()
   pessoaPtr->irmaos = NULL;
 }
 
-Pessoa *adicionarPessoa(Pessoa *Pessoa)
+Pessoa *adicionarPessoa(Pessoa *pessoa)
 {
 
   printf("\nDigite o nome da pessoa: ");
-  scanf(" %s", Pessoa->nome);
+  scanf(" %s", pessoa->nome);
+  // ADICIONAR PAI E MAE
+  // ADICIONAR PAI E MAE
+  pessoa->Pai = criarNoPessoa();
+  Pessoa *paiPtr = pessoa->Pai;
 
-  // ADICIONAR FILA IRMAOS
-  Pessoa->irmaos = malloc(sizeof(filaIrmaos));
-  filaIrmaos *IrmaoPtr = Pessoa->irmaos;
+  printf("\nDigite o nome do pai: ");
+  scanf(" %s", paiPtr->nome);
+
+  pessoa->Mae = criarNoPessoa();
+  Pessoa *maePtr = pessoa->Mae;
+
+  printf("\nDigite o nome da mãe: ");
+  scanf(" %s", maePtr->nome);
+
+  // ADICIONAR IRMAOS (FILA)
+  pessoa->irmaos = malloc(sizeof(filaIrmaos));
+  filaIrmaos *IrmaoPtr = pessoa->irmaos;
   IrmaoPtr->front = -1;
   IrmaoPtr->rear = -1;
   int saida = 1;
@@ -53,7 +68,7 @@ Pessoa *adicionarPessoa(Pessoa *Pessoa)
     IrmaoPtr->front = 0;
     IrmaoPtr->rear = i;
   }
-  return Pessoa;
+  return pessoa;
 }
 
 void imprimirArvore(Pessoa *Pessoa)
@@ -78,9 +93,9 @@ void imprimirArvore(Pessoa *Pessoa)
   printf(")");
 
   // IMPRIMIR PAI E MAE
-  printf("\nPai-> %s", Pessoa->Pai);
+  printf("\nPai-> %s", Pessoa->Pai->nome);
   imprimirArvore(Pessoa->Pai);
-  printf("\nMae-> %s", Pessoa->Mae);
+  printf("\nMae-> %s", Pessoa->Mae->nome);
   imprimirArvore(Pessoa->Mae);
 }
 
