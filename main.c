@@ -26,11 +26,13 @@ Pessoa *criarNoPessoa()
   pessoaPtr->irmaos = NULL;
 }
 
-Pessoa *adicionarPessoa(Pessoa *pessoa)
+Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
 {
-
-  printf("\nDigite o nome da pessoa: ");
-  scanf(" %s", pessoa->nome);
+  if (!cadastrouPrimeira)
+  {
+    printf("\nDigite o nome da pessoa: ");
+    scanf(" %s", pessoa->nome);
+  }
 
   // ADICIONAR PAI E MAE
   pessoa->Pai = criarNoPessoa();
@@ -106,8 +108,8 @@ void imprimirArvore(Pessoa *Pessoa)
   }
 
   // IMPRIMIR FILHOS E IRMAOS
-  printf("\n");
-  printf("\nFilho(s): (%s", Pessoa->nome);
+
+  printf("\n(%s", Pessoa->nome);
 
   filaIrmaos *irmaos = Pessoa->irmaos;
   if (irmaos != NULL && irmaos->front != -1)
@@ -139,6 +141,7 @@ int main()
   Pessoa *raiz = criarNoPessoa();
   while (menu != 1)
   {
+    printf("\n\n_________MENU_________");
     printf("\n1 - Sair");
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealógica");
@@ -157,11 +160,17 @@ int main()
       menu = 1;
       break;
     case 2:
-      adicionarPessoa(raiz);
+      adicionarPessoa(raiz, cadastrouPrimeira);
       cadastrouPrimeira = 1;
       break;
     case 3:
       imprimirArvore(raiz);
+      break;
+    case 8:
+      adicionarPessoa(encontrarUltimoNomePai(raiz), cadastrouPrimeira);
+      break;
+    case 9:
+      adicionarPessoa(encontrarUltimoNomeMae(raiz), cadastrouPrimeira);
       break;
     default:
       printf("Opcao invalida\n");
