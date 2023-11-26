@@ -69,11 +69,39 @@ Pessoa *adicionarPessoa(Pessoa *pessoa)
   return pessoa;
 }
 
+Pessoa *encontrarUltimoNomePai(Pessoa *raiz)
+{
+  if (raiz == NULL)
+  {
+    return NULL;
+  }
+
+  while (raiz->Pai != NULL)
+  {
+    raiz = raiz->Pai;
+  }
+
+  return raiz->nome;
+}
+Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
+{
+  if (raiz == NULL)
+  {
+    return NULL;
+  }
+
+  while (raiz->Mae != NULL)
+  {
+    raiz = raiz->Mae;
+  }
+
+  return raiz->nome;
+}
+
 void imprimirArvore(Pessoa *Pessoa)
 {
   if (Pessoa == NULL)
   {
-    printf("\n<vazio>");
     return;
   }
 
@@ -107,13 +135,20 @@ void imprimirArvore(Pessoa *Pessoa)
 int main()
 {
   int menu = 0;
+  int cadastrouPrimeira = 0;
   Pessoa *raiz = criarNoPessoa();
   while (menu != 1)
   {
     printf("\n1 - Sair");
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealógica");
-    printf("\n4 - Associar");
+    if (cadastrouPrimeira)
+    {
+      printf("\n\n-- Recomendações --");
+      printf("\n8 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz));
+      printf("\n9 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz));
+    }
+
     printf("\nDigite a opcao: ");
     scanf("%d", &menu);
     switch (menu)
@@ -123,6 +158,7 @@ int main()
       break;
     case 2:
       adicionarPessoa(raiz);
+      cadastrouPrimeira = 1;
       break;
     case 3:
       imprimirArvore(raiz);
