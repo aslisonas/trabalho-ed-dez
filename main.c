@@ -290,6 +290,15 @@ int main()
       getchar();
       adicionarPessoa(encontrarUltimoNomeMae(raiz), cadastrouPrimeira);
       break;
+    case 12:
+
+      strcpy(raiz->nome, "Alison Pereira");
+      raiz->Pai = criarNoPessoa();
+      strcpy(raiz->Pai->nome, "Antonio Silva");
+      raiz->Mae = criarNoPessoa();
+      strcpy(raiz->Mae->nome, "Maria Silva");
+
+      break;
 
     default:
       printf("Opcao invalida\n");
