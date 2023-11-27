@@ -1,8 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define TAM 10
+
+// FUNCAO PARA PROCESSAR STRINGS
+void processarString(char *string)
+{
+  int i, j = 0;
+
+  // Tirar espaco em branco
+  for (i = 0; string[i] != '\0'; i++)
+  {
+    if (!isspace(string[i]))
+    {
+      string[j++] = string[i];
+    }
+  }
+  string[j] = '\0';
+
+  // Primeira Letra Maiscula
+  string[0] = toupper(string[0]);
+}
 
 typedef struct filaIrmaos
 {
@@ -32,6 +52,7 @@ Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
   {
     printf("\nDigite o nome da pessoa: ");
     scanf(" %s", pessoa->nome);
+    processarString(pessoa->nome);
   }
 
   // ADICIONAR PAI E MAE
@@ -40,12 +61,14 @@ Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
 
   printf("\nDigite o nome do pai: ");
   scanf(" %s", paiPtr->nome);
+  processarString(paiPtr->nome);
 
   pessoa->Mae = criarNoPessoa();
   Pessoa *maePtr = pessoa->Mae;
 
   printf("\nDigite o nome da mae: ");
   scanf(" %s", maePtr->nome);
+  processarString(maePtr->nome);
 
   // ADICIONAR IRMAOS (FILA)
   pessoa->irmaos = malloc(sizeof(filaIrmaos));
@@ -64,6 +87,7 @@ Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
 
     printf("\nNome do %d° irmao: ", i + 1);
     scanf(" %s", IrmaoPtr->nomeIrmao[i]);
+    processarString(IrmaoPtr->nomeIrmao[i]);
 
     IrmaoPtr->front = 0;
     IrmaoPtr->rear = i;
@@ -109,7 +133,7 @@ void imprimirArvore(Pessoa *Pessoa)
 
   // IMPRIMIR FILHOS E IRMAOS
 
-  printf("\n(%s", Pessoa->nome);
+  printf("\n\n(%s", Pessoa->nome);
 
   filaIrmaos *irmaos = Pessoa->irmaos;
   if (irmaos != NULL && irmaos->front != -1)
@@ -145,11 +169,12 @@ int main()
     printf("\n1 - Sair");
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealógica");
+    printf("\n3 - Buscar Pessoa Especifica");
     if (cadastrouPrimeira)
     {
       printf("\n\n-- Recomendações --");
-      printf("\n8 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz)->nome);
-      printf("\n9 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz)->nome);
+      printf("\n10 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz)->nome);
+      printf("\n11 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz)->nome);
     }
 
     printf("\nDigite a opcao: ");
@@ -166,12 +191,17 @@ int main()
     case 3:
       imprimirArvore(raiz);
       break;
-    case 8:
+    case 4:
+      char nomeBusca[50];
+
+      break;
+    case 10:
       adicionarPessoa(encontrarUltimoNomePai(raiz), cadastrouPrimeira);
       break;
-    case 9:
+    case 11:
       adicionarPessoa(encontrarUltimoNomeMae(raiz), cadastrouPrimeira);
       break;
+
     default:
       printf("Opcao invalida\n");
       break;
