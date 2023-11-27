@@ -58,87 +58,6 @@ Pessoa *criarNoPessoa()
   pessoaPtr->Mae = NULL;
   pessoaPtr->irmaos = NULL;
 }
-
-Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
-{
-
-  if (!cadastrouPrimeira)
-  {
-    printf("\nDigite o nome da pessoa: ");
-    fgets(pessoa->nome, 50, stdin);
-    processarString(pessoa->nome);
-  }
-
-  // ADICIONAR PAI E MAE
-  pessoa->Pai = criarNoPessoa();
-  Pessoa *paiPtr = pessoa->Pai;
-
-  printf("\nDigite o nome do pai: ");
-  fgets(paiPtr->nome, 50, stdin);
-  processarString(paiPtr->nome);
-
-  pessoa->Mae = criarNoPessoa();
-  Pessoa *maePtr = pessoa->Mae;
-
-  printf("\nDigite o nome da mae: ");
-  fgets(maePtr->nome, 50, stdin);
-  processarString(maePtr->nome);
-
-  // ADICIONAR IRMAOS (FILA)
-  pessoa->irmaos = malloc(sizeof(filaIrmaos));
-  filaIrmaos *IrmaoPtr = pessoa->irmaos;
-  IrmaoPtr->front = -1;
-  IrmaoPtr->rear = -1;
-  int saida = 1;
-  for (int i = 0; i < TAM; i++)
-  {
-    printf("\n0 - Pular\n1 - Adicionar irmao: ");
-    scanf("%d", &saida);
-    getchar();
-    if (saida == 0)
-    {
-      break;
-    }
-
-    printf("\nNome do %d° irmao: ", i + 1);
-    fgets(IrmaoPtr->nomeIrmao[i], 50, stdin);
-    processarString(IrmaoPtr->nomeIrmao[i]);
-
-    IrmaoPtr->front = 0;
-    IrmaoPtr->rear = i;
-  }
-  return pessoa;
-}
-
-Pessoa *encontrarUltimoNomePai(Pessoa *raiz)
-{
-  if (raiz == NULL)
-  {
-    return NULL;
-  }
-
-  while (raiz->Pai != NULL)
-  {
-    raiz = raiz->Pai;
-  }
-
-  return raiz;
-}
-Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
-{
-  if (raiz == NULL)
-  {
-    return NULL;
-  }
-
-  while (raiz->Mae != NULL)
-  {
-    raiz = raiz->Mae;
-  }
-
-  return raiz;
-}
-
 Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDados)
 {
   if (raiz == NULL)
@@ -196,6 +115,148 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
 
   buscarPessoaEspecifica(raiz->Pai, nomeBusca, mostrarDados);
   buscarPessoaEspecifica(raiz->Mae, nomeBusca, mostrarDados);
+}
+
+void adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
+{
+
+  if (!cadastrouPrimeira)
+  {
+    printf("\nDigite o nome da pessoa: ");
+    fgets(pessoa->nome, 50, stdin);
+    processarString(pessoa->nome);
+  }
+
+  // ADICIONAR PAI E MAE
+  pessoa->Pai = criarNoPessoa();
+  Pessoa *paiPtr = pessoa->Pai;
+
+  printf("\nDigite o nome do pai: ");
+  fgets(paiPtr->nome, 50, stdin);
+  processarString(paiPtr->nome);
+
+  pessoa->Mae = criarNoPessoa();
+  Pessoa *maePtr = pessoa->Mae;
+
+  printf("\nDigite o nome da mae: ");
+  fgets(maePtr->nome, 50, stdin);
+  processarString(maePtr->nome);
+
+  // ADICIONAR IRMAOS (FILA)
+  pessoa->irmaos = malloc(sizeof(filaIrmaos));
+  filaIrmaos *IrmaoPtr = pessoa->irmaos;
+  IrmaoPtr->front = -1;
+  IrmaoPtr->rear = -1;
+  int saida = 1;
+  for (int i = 0; i < TAM; i++)
+  {
+    printf("\n0 - Pular\n1 - Adicionar irmao: ");
+    scanf("%d", &saida);
+    getchar();
+    if (saida == 0)
+    {
+      break;
+    }
+
+    printf("\nNome do %d° irmao: ", i + 1);
+    fgets(IrmaoPtr->nomeIrmao[i], 50, stdin);
+    processarString(IrmaoPtr->nomeIrmao[i]);
+
+    IrmaoPtr->front = 0;
+    IrmaoPtr->rear = i;
+  }
+}
+void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
+{
+  int escolha = 0;
+  Pessoa *pessoaPtr = pessoa;
+
+  printf("\n1 - Alterar o nome / 0 - Pular / 2 - Alterar para pessoa existente");
+  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->nome);
+  scanf("%d", &escolha);
+  if (escolha)
+  {
+    getchar();
+    printf("\nNovo nome: ");
+    fgets(pessoaPtr->nome, 50, stdin);
+    processarString(pessoaPtr->nome);
+  }
+
+  printf("\nDeseja editar o atual pai' %s ' ? (1/0/2)", pessoaPtr->Pai->nome);
+  scanf("%d", &escolha);
+  if (escolha == 2)
+  {
+    getchar();
+    printf("\n' %s ' vai se tornar pai de: ");
+    fgets(nomeBusca, 50, stdin);
+    processarString(nomeBusca);
+    Pessoa *pessoaProcurada = buscarPessoaEspecifica(pessoa, nomeBusca, 0);
+    if (pessoaProcurada->Pai->nome != NULL)
+    {
+      printf("\n(Error) Local já preenchido por ' %s ', delete-o para fazer a alteração", pessoaProcurada->Pai->nome);
+    }
+    else
+    {
+      pessoaProcurada->Pai = pessoaPtr;
+      // DEPOIS ADICIONAR FUNCAO DE
+    };
+  }
+  else if (escolha)
+  {
+    getchar();
+    printf("\nNovo nome: ");
+    fgets(pessoaPtr->Pai->nome, 50, stdin);
+    processarString(pessoaPtr->Pai->nome);
+  }
+
+  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->Pai->nome);
+  scanf("%d", &escolha);
+  if (escolha)
+  {
+    getchar();
+    printf("\nNovo nome: ");
+    fgets(pessoaPtr->nome, 50, stdin);
+    processarString(pessoaPtr->nome);
+  }
+
+  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->nome);
+  scanf("%d", &escolha);
+  if (escolha)
+  {
+    getchar();
+    printf("\nNovo nome: ");
+    fgets(pessoaPtr->nome, 50, stdin);
+    processarString(pessoaPtr->nome);
+  }
+}
+
+Pessoa *encontrarUltimoNomePai(Pessoa *raiz)
+{
+  if (raiz == NULL)
+  {
+    return NULL;
+  }
+
+  while (raiz->Pai != NULL)
+  {
+    raiz = raiz->Pai;
+  }
+
+  return raiz;
+}
+Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
+{
+  if (raiz == NULL)
+  {
+    return NULL;
+  }
+
+  while (raiz->Mae != NULL)
+  {
+    raiz = raiz->Mae;
+  }
+
+  return raiz;
 }
 
 void imprimirArvore(Pessoa *Pessoa)
@@ -277,10 +338,10 @@ int main()
       break;
     case 5:
       getchar();
-      printf("\nInsira o nome da pessoa para busca: ");
+      printf("\nInsira o nome da pessoa para editar: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
-      adicionarPessoa(buscarPessoaEspecifica(raiz, nomeBusca, 0), 0);
+      editarPessoa(buscarPessoaEspecifica(raiz, nomeBusca, 0), nomeBusca);
       break;
     case 10:
       getchar();
@@ -291,15 +352,13 @@ int main()
       adicionarPessoa(encontrarUltimoNomeMae(raiz), cadastrouPrimeira);
       break;
     case 12:
-
       strcpy(raiz->nome, "Alison Pereira");
       raiz->Pai = criarNoPessoa();
       strcpy(raiz->Pai->nome, "Antonio Silva");
       raiz->Mae = criarNoPessoa();
       strcpy(raiz->Mae->nome, "Maria Silva");
-
+      cadastrouPrimeira = 1;
       break;
-
     default:
       printf("Opcao invalida\n");
       break;
