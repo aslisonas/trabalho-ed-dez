@@ -8,17 +8,30 @@
 // FUNCAO PARA PROCESSAR STRINGS
 void processarString(char *string)
 {
-  int i, j = 0;
-
-  // Tirar espaco em branco
-  for (i = 0; string[i] != '\0'; i++)
+  // Remover espacos em branco no comeco e final
+  int inicio = 0, fim;
+  while (isspace(string[inicio]))
   {
-    if (!isspace(string[i]))
-    {
-      string[j++] = string[i];
-    }
+    inicio++;
+  };
+
+  fim = strlen(string) - 1;
+  while (isspace(string[fim]))
+  {
+    fim--;
+  }
+  int j = 0;
+  for (int i = inicio; i <= fim; i++)
+  {
+    string[j++] = string[i];
   }
   string[j] = '\0';
+
+  // Palavra em minusculo
+  for (int i = 0; string[i] != '\0'; i++)
+  {
+    string[i] = tolower(string[i]);
+  }
 
   // Primeira Letra Maiscula
   string[0] = toupper(string[0]);
@@ -48,10 +61,11 @@ Pessoa *criarNoPessoa()
 
 Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
 {
+  getchar();
   if (!cadastrouPrimeira)
   {
     printf("\nDigite o nome da pessoa: ");
-    scanf(" %s", pessoa->nome);
+    fgets(pessoa->nome, 50, stdin);
     processarString(pessoa->nome);
   }
 
@@ -60,14 +74,14 @@ Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
   Pessoa *paiPtr = pessoa->Pai;
 
   printf("\nDigite o nome do pai: ");
-  scanf(" %s", paiPtr->nome);
+  fgets(paiPtr->nome, 50, stdin);
   processarString(paiPtr->nome);
 
   pessoa->Mae = criarNoPessoa();
   Pessoa *maePtr = pessoa->Mae;
 
   printf("\nDigite o nome da mae: ");
-  scanf(" %s", maePtr->nome);
+  fgets(maePtr->nome, 50, stdin);
   processarString(maePtr->nome);
 
   // ADICIONAR IRMAOS (FILA)
@@ -80,13 +94,14 @@ Pessoa *adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
   {
     printf("\n0 - Pular\n1 - Adicionar irmao: ");
     scanf("%d", &saida);
+    getchar();
     if (saida == 0)
     {
       break;
     }
 
     printf("\nNome do %d° irmao: ", i + 1);
-    scanf(" %s", IrmaoPtr->nomeIrmao[i]);
+    fgets(IrmaoPtr->nomeIrmao[i], 50, stdin);
     processarString(IrmaoPtr->nomeIrmao[i]);
 
     IrmaoPtr->front = 0;
@@ -193,7 +208,9 @@ int main()
       break;
     case 4:
       char nomeBusca[50];
-
+      printf("\nInsira o nome da pessoa para busca: ");
+      fgets(nomeBusca, 50, stdin);
+      processarString(nomeBusca);
       break;
     case 10:
       adicionarPessoa(encontrarUltimoNomePai(raiz), cadastrouPrimeira);
