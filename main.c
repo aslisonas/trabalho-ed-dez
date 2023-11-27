@@ -162,7 +162,34 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
       }
     }
     return raiz;
+  };
+
+  // BUSCA ESPECIFICA NA LISTA DE IRMAOS
+  if (raiz->irmaos->front == 0)
+  {
+    for (int i = 0; i <= raiz->irmaos->rear; i++)
+    {
+      if (!strcmp(raiz->irmaos->nomeIrmao[i], nomeBusca))
+      {
+        if (mostrarDados)
+        {
+          printf("\n\nPessoa: %s", raiz->nome);
+          printf("\nPai-> %s", raiz->Pai->nome);
+          printf("\nMae-> %s", raiz->Mae->nome);
+          if (raiz->irmaos != NULL && raiz->irmaos->front != -1)
+          {
+            printf("\n\nIrmaos-> ");
+            for (int i = 0; i <= raiz->irmaos->rear; i++)
+            {
+              printf("%s, ", raiz->irmaos->nomeIrmao[i]);
+            }
+          }
+        }
+        return raiz;
+      }
+    }
   }
+
   buscarPessoaEspecifica(raiz->Pai, nomeBusca, mostrarDados);
   buscarPessoaEspecifica(raiz->Mae, nomeBusca, mostrarDados);
 }
