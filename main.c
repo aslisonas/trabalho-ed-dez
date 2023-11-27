@@ -145,47 +145,51 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
   {
     return NULL;
   }
-  if (!strcmp(raiz->nome, nomeBusca))
+  Pessoa *raizPtr = raiz;
+
+  if (!strcmp(raizPtr->nome, nomeBusca))
   {
     if (mostrarDados)
     {
-      printf("\n\nPessoa: %s", raiz->nome);
-      printf("\nPai-> %s", raiz->Pai->nome);
-      printf("\nMae-> %s", raiz->Mae->nome);
-      if (raiz->irmaos != NULL && raiz->irmaos->front != -1)
+      printf("\n\nPessoa: %s", raizPtr->nome);
+      printf("\nPai-> %s", raizPtr->Pai->nome);
+      printf("\nMae-> %s", raizPtr->Mae->nome);
+      if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
       {
-        printf("\n\nIrmaos-> ");
-        for (int i = 0; i <= raiz->irmaos->rear; i++)
+        printf("\nIrmaos-> ");
+        for (int i = 0; i <= raizPtr->irmaos->rear; i++)
         {
-          printf("%s, ", raiz->irmaos->nomeIrmao[i]);
+          printf("%s, ", raizPtr->irmaos->nomeIrmao[i]);
         }
       }
     }
-    return raiz;
+    return raizPtr;
   };
 
   // BUSCA ESPECIFICA NA LISTA DE IRMAOS
-  if (raiz->irmaos->front == 0)
+  if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
   {
-    for (int i = 0; i <= raiz->irmaos->rear; i++)
+    for (int i = 0; i <= raizPtr->irmaos->rear; i++)
     {
-      if (!strcmp(raiz->irmaos->nomeIrmao[i], nomeBusca))
+      if (!strcmp(raizPtr->irmaos->nomeIrmao[i], nomeBusca))
       {
         if (mostrarDados)
         {
-          printf("\n\nPessoa: %s", raiz->nome);
-          printf("\nPai-> %s", raiz->Pai->nome);
-          printf("\nMae-> %s", raiz->Mae->nome);
-          if (raiz->irmaos != NULL && raiz->irmaos->front != -1)
+          printf("\n\nPessoa: %s", raizPtr->irmaos->nomeIrmao[i]);
+          printf("\nPai-> %s", raizPtr->Pai->nome);
+          printf("\nMae-> %s", raizPtr->Mae->nome);
+          printf("\nIrmaos-> ");
+          printf("%s, ", raizPtr->nome);
+
+          for (int j = 0; j <= raizPtr->irmaos->rear; j++)
           {
-            printf("\n\nIrmaos-> ");
-            for (int i = 0; i <= raiz->irmaos->rear; i++)
+            if (i != j)
             {
-              printf("%s, ", raiz->irmaos->nomeIrmao[i]);
+              printf("%s, ", raizPtr->irmaos->nomeIrmao[j]);
             }
           }
         }
-        return raiz;
+        return raizPtr;
       }
     }
   }
