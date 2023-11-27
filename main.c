@@ -139,6 +139,34 @@ Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
   return raiz;
 }
 
+Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDados)
+{
+  if (raiz == NULL)
+  {
+    return NULL;
+  }
+  if (!strcmp(raiz->nome, nomeBusca))
+  {
+    if (mostrarDados)
+    {
+      printf("\n\nPessoa: %s", raiz->nome);
+      printf("\nPai-> %s", raiz->Pai->nome);
+      printf("\nMae-> %s", raiz->Mae->nome);
+      if (raiz->irmaos != NULL && raiz->irmaos->front != -1)
+      {
+        printf("\n\nIrmaos-> ");
+        for (int i = 0; i <= raiz->irmaos->rear; i++)
+        {
+          printf("%s, ", raiz->irmaos->nomeIrmao[i]);
+        }
+      }
+    }
+    return raiz;
+  }
+  buscarPessoaEspecifica(raiz->Pai, nomeBusca, mostrarDados);
+  buscarPessoaEspecifica(raiz->Mae, nomeBusca, mostrarDados);
+}
+
 void imprimirArvore(Pessoa *Pessoa)
 {
   if (Pessoa == NULL)
@@ -184,7 +212,7 @@ int main()
     printf("\n1 - Sair");
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealógica");
-    printf("\n3 - Buscar Pessoa Especifica");
+    printf("\n4 - Buscar Pessoa Especifica");
     if (cadastrouPrimeira)
     {
       printf("\n\n-- Recomendações --");
@@ -208,9 +236,11 @@ int main()
       break;
     case 4:
       char nomeBusca[50];
+      getchar();
       printf("\nInsira o nome da pessoa para busca: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
+      buscarPessoaEspecifica(raiz, nomeBusca, 1);
       break;
     case 10:
       adicionarPessoa(encontrarUltimoNomePai(raiz), cadastrouPrimeira);
