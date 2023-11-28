@@ -86,7 +86,7 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
     return raizPtr;
   }
 
-  // Busca especifica na lista de irmaos
+  // Busca especifica na lista de irmaos tambem
   if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
   {
     for (int i = 0; i <= raizPtr->irmaos->rear; i++)
@@ -180,8 +180,7 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
   int escolha = 0;
   Pessoa *pessoaPtr = pessoa;
 
-  printf("\n1 - Alterar o nome / 0 - Pular");
-  printf("\nEditar o atual nome de ' %s ' ? (1- Sim/0- Nao): ", pessoaPtr->nome);
+  printf("\nEditar o atual nome de ' %s ' ? (1- Sim / 0- Pular): ", pessoaPtr->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
@@ -191,7 +190,7 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     processarString(pessoaPtr->nome);
   }
 
-  printf("\nEditar o atual nome ' %s ' do pai? (1- Sim/0- Nao): ", pessoaPtr->Pai->nome);
+  printf("\nEditar o atual nome ' %s ' do pai? (1- Sim / 0- Pular): ", pessoaPtr->Pai->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
@@ -201,7 +200,7 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     processarString(pessoaPtr->Pai->nome);
   }
 
-  printf("\nEditar o atual nome ' %s ' da mae? (1- Sim/0- Nao): ", pessoaPtr->Mae->nome);
+  printf("\nEditar o atual nome ' %s ' da mae? (1- Sim / 0- Pular): ", pessoaPtr->Mae->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
@@ -209,6 +208,24 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     printf("\nNovo nome: ");
     fgets(pessoaPtr->Mae->nome, 50, stdin);
     processarString(pessoaPtr->Mae->nome);
+  }
+
+  if (pessoaPtr->irmaos != NULL && pessoaPtr->irmaos->front != -1)
+  {
+    for (int i = 0; i <= pessoaPtr->irmaos->rear; i++)
+    {
+      printf("\n%d- %s", i + 1, pessoaPtr->irmaos->nomeIrmao[i]);
+    }
+    printf("\nEditar o nome de algum irmao? ([1...10]- Escolher o Irmao / 0- Pular): ");
+    scanf("%d", &escolha);
+    escolha--;
+    if (escolha > 0 && escolha <= 10)
+    {
+      getchar();
+      printf("\nNovo nome: ");
+      fgets(pessoaPtr->irmaos->nomeIrmao[escolha], 50, stdin);
+      processarString(pessoaPtr->irmaos->nomeIrmao[escolha]);
+    }
   }
 }
 
@@ -316,8 +333,7 @@ int main()
       printf("\nInsira o nome da pessoa para busca: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
-      Pessoa *pessoaProcurada = buscarPessoaEspecifica(raiz, nomeBusca, 1);
-
+      buscarPessoaEspecifica(raiz, nomeBusca, 1);
       break;
     case 5:
       getchar();
