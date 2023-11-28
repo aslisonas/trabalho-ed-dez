@@ -71,8 +71,9 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
     if (mostrarDados)
     {
       printf("\n\nPessoa: %s", raizPtr->nome);
-      printf("\nPai-> %s", raizPtr->Pai->nome);
-      printf("\nMae-> %s", raizPtr->Mae->nome);
+      printf("\nPai-> %s", (raizPtr->Pai != NULL) ? raizPtr->Pai->nome : "<-Sem dados->");
+      printf("\nMae-> %s", (raizPtr->Mae != NULL) ? raizPtr->Mae->nome : "<-Sem dados->");
+
       if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
       {
         printf("\nIrmaos-> ");
@@ -83,7 +84,7 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
       }
     }
     return raizPtr;
-  };
+  }
 
   // Busca especifica na lista de irmaos
   if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
@@ -113,8 +114,16 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
     }
   }
 
-  buscarPessoaEspecifica(raiz->Pai, nomeBusca, mostrarDados);
-  buscarPessoaEspecifica(raiz->Mae, nomeBusca, mostrarDados);
+  if (raiz->Pai != NULL)
+  {
+    buscarPessoaEspecifica(raizPtr->Pai, nomeBusca, mostrarDados);
+  }
+  if (raiz->Mae != NULL)
+  {
+    buscarPessoaEspecifica(raizPtr->Mae, nomeBusca, mostrarDados);
+  }
+
+  return NULL;
 }
 
 void adicionarPessoa(Pessoa *pessoa, int cadastrouPrimeira)
@@ -171,8 +180,8 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
   int escolha = 0;
   Pessoa *pessoaPtr = pessoa;
 
-  printf("\n1 - Alterar o nome / 0 - Pular / 2 - Alterar para pessoa existente");
-  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->nome);
+  printf("\n1 - Alterar o nome / 0 - Pular");
+  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1- Sim/0- Nao): ", pessoaPtr->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
@@ -184,8 +193,10 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
 
   printf("\nDeseja editar o atual pai' %s ' ? (1/0/2)", pessoaPtr->Pai->nome);
   scanf("%d", &escolha);
+  printf("escolha");
   if (escolha == 2)
   {
+    printf("entrou escolha == 2");
     getchar();
     printf("\n' %s ' vai se tornar pai de: ");
     fgets(nomeBusca, 50, stdin);
@@ -193,7 +204,7 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     Pessoa *pessoaProcurada = buscarPessoaEspecifica(pessoa, nomeBusca, 0);
     if (pessoaProcurada->Pai->nome != NULL)
     {
-      printf("\n(Error) Local já preenchido por ' %s ', delete-o para fazer a alteração", pessoaProcurada->Pai->nome);
+      printf("\n<--- Local já preenchido por ' %s ', delete-o para fazer a alteração --->", pessoaProcurada->Pai->nome);
     }
     else
     {
@@ -334,7 +345,8 @@ int main()
       printf("\nInsira o nome da pessoa para busca: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
-      buscarPessoaEspecifica(raiz, nomeBusca, 1);
+      Pessoa *pessoaProcurada = buscarPessoaEspecifica(raiz, nomeBusca, 1);
+
       break;
     case 5:
       getchar();
@@ -353,10 +365,13 @@ int main()
       break;
     case 12:
       strcpy(raiz->nome, "Alison Pereira");
+      processarString(raiz->nome);
       raiz->Pai = criarNoPessoa();
       strcpy(raiz->Pai->nome, "Antonio Silva");
+      processarString(raiz->Pai->nome);
       raiz->Mae = criarNoPessoa();
       strcpy(raiz->Mae->nome, "Maria Silva");
+      processarString(raiz->Mae->nome);
       cadastrouPrimeira = 1;
       break;
     default:
