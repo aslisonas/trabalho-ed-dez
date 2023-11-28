@@ -181,7 +181,7 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
   Pessoa *pessoaPtr = pessoa;
 
   printf("\n1 - Alterar o nome / 0 - Pular");
-  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1- Sim/0- Nao): ", pessoaPtr->nome);
+  printf("\nEditar o atual nome de ' %s ' ? (1- Sim/0- Nao): ", pessoaPtr->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
@@ -191,28 +191,9 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     processarString(pessoaPtr->nome);
   }
 
-  printf("\nDeseja editar o atual pai' %s ' ? (1/0/2)", pessoaPtr->Pai->nome);
+  printf("\nEditar o atual nome ' %s ' do pai? (1- Sim/0- Nao): ", pessoaPtr->Pai->nome);
   scanf("%d", &escolha);
-  printf("escolha");
-  if (escolha == 2)
-  {
-    printf("entrou escolha == 2");
-    getchar();
-    printf("\n' %s ' vai se tornar pai de: ");
-    fgets(nomeBusca, 50, stdin);
-    processarString(nomeBusca);
-    Pessoa *pessoaProcurada = buscarPessoaEspecifica(pessoa, nomeBusca, 0);
-    if (pessoaProcurada->Pai->nome != NULL)
-    {
-      printf("\n<--- Local já preenchido por ' %s ', delete-o para fazer a alteração --->", pessoaProcurada->Pai->nome);
-    }
-    else
-    {
-      pessoaProcurada->Pai = pessoaPtr;
-      // DEPOIS ADICIONAR FUNCAO DE
-    };
-  }
-  else if (escolha)
+  if (escolha)
   {
     getchar();
     printf("\nNovo nome: ");
@@ -220,24 +201,14 @@ void editarPessoa(Pessoa *pessoa, char nomeBusca[49])
     processarString(pessoaPtr->Pai->nome);
   }
 
-  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->Pai->nome);
+  printf("\nEditar o atual nome ' %s ' da mae? (1- Sim/0- Nao): ", pessoaPtr->Mae->nome);
   scanf("%d", &escolha);
   if (escolha)
   {
     getchar();
     printf("\nNovo nome: ");
-    fgets(pessoaPtr->nome, 50, stdin);
-    processarString(pessoaPtr->nome);
-  }
-
-  printf("\nDeseja editar a atual Pessoa ' %s ' ? (1/0)", pessoaPtr->nome);
-  scanf("%d", &escolha);
-  if (escolha)
-  {
-    getchar();
-    printf("\nNovo nome: ");
-    fgets(pessoaPtr->nome, 50, stdin);
-    processarString(pessoaPtr->nome);
+    fgets(pessoaPtr->Mae->nome, 50, stdin);
+    processarString(pessoaPtr->Mae->nome);
   }
 }
 
