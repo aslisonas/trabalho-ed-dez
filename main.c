@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
-#define TAM 10
-
+#include </home/mikeyas/trabalho-ed-dez/trabalho-ed-dez/headers.h>
 // FUNCAO PARA PROCESSAR STRINGS
 void processarString(char *string)
 {
@@ -36,20 +30,6 @@ void processarString(char *string)
   // Primeira Letra Maiscula
   string[0] = toupper(string[0]);
 }
-
-typedef struct filaIrmaos
-{
-  char nomeIrmao[TAM][50];
-  int front;
-  int rear;
-} filaIrmaos;
-typedef struct Pessoa
-{
-  char nome[50];
-  struct Pessoa *Pai;
-  struct Pessoa *Mae;
-  struct filaIrmaos *irmaos;
-} Pessoa;
 
 Pessoa *criarNoPessoa()
 {
