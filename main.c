@@ -84,7 +84,11 @@ void criarAcao(Pessoa *pessoa, int tipoOp)
 
   if (raizPilhaOp->topo >= MAXOPR - 1)
   {
+<<<<<<< HEAD
     printf("\nPilha de operacoes lotou");
+=======
+    printf("\nPilha lotou");
+>>>>>>> refs/remotes/origin/main
     return;
   }
 
@@ -267,10 +271,17 @@ void editarPessoa(Pessoa *pessoa)
 {
   if (pessoa == NULL)
   {
+<<<<<<< HEAD
     printf("\n<-- Pessoa nao encontrada -->");
     return;
   }
   criarAcao(pessoa, 1);
+=======
+    printf("\nPessoa nao encontrada");
+    return;
+  }
+
+>>>>>>> refs/remotes/origin/main
   int escolha = 0;
   Pessoa *pessoaPtr = pessoa;
 
@@ -295,6 +306,13 @@ void editarPessoa(Pessoa *pessoa)
       fgets(pessoaPtr->Pai->nome, 50, stdin);
       processarString(pessoaPtr->Pai->nome);
     }
+<<<<<<< HEAD
+=======
+  }
+  else
+  {
+    printf("\nNao ha pai registrado");
+>>>>>>> refs/remotes/origin/main
   }
 
   if (pessoaPtr->Mae != NULL)
@@ -308,6 +326,13 @@ void editarPessoa(Pessoa *pessoa)
       fgets(pessoaPtr->Mae->nome, 50, stdin);
       processarString(pessoaPtr->Mae->nome);
     }
+<<<<<<< HEAD
+=======
+  }
+  else
+  {
+    printf("\nNao ha Mae registrado");
+>>>>>>> refs/remotes/origin/main
   }
 
   if (pessoaPtr->irmaos != NULL && pessoaPtr->irmaos->front != -1)
@@ -329,6 +354,10 @@ void editarPessoa(Pessoa *pessoa)
         processarString(pessoaPtr->irmaos->nomeIrmao[escolha]);
       }
     }
+  }
+  else
+  {
+    printf("\nNao ha irmaos registrados");
   }
 }
 void excluirPessoa(Pessoa *pessoa)
@@ -430,8 +459,13 @@ int main()
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealogica");
     printf("\n4 - BUSCAR Dados Pessoa Especifica");
+<<<<<<< HEAD
     printf("\n5 - EDITAR Dados/Parentes Pessoa Especifica");
     printf("\n6 - EXCLUIR Dados Pessoa Especifica");
+=======
+    printf("\n5 - EDITAR Dados Pessoa Especifica");
+    printf("\n6 - Desfazer Acao");
+>>>>>>> refs/remotes/origin/main
     if (cadastrouPrimeira)
     {
       printf("\n8 - Desfazer Acao <-");
@@ -452,6 +486,10 @@ int main()
       getchar();
       adicionarPessoa(raiz, cadastrouPrimeira);
       cadastrouPrimeira = 1;
+      if (!cadastrouPrimeira)
+      {
+        PilhaOperacoes *pilhaOperacoes = malloc(sizeof(PilhaOperacoes));
+      }
       break;
     case 3:
       imprimirArvore(raiz);
@@ -465,10 +503,17 @@ int main()
       break;
     case 5:
       getchar();
+      nomeBusca[0] = '\0';
       printf("\nInsira o nome da pessoa para editar: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
       editarPessoa(buscarPessoaEspecifica(raiz, nomeBusca, 0));
+<<<<<<< HEAD
+=======
+      break;
+    case 6:
+      desfazerAcao();
+>>>>>>> refs/remotes/origin/main
       break;
     case 6:
       getchar();
