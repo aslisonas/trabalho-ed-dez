@@ -84,7 +84,7 @@ void criarAcao(Pessoa *pessoa, int tipoOp)
 
   if (raizPilhaOp->topo >= MAXOPR - 1)
   {
-    printf("\nPilha lotou");
+    printf("\nPilha de operacoes lotou");
     return;
   }
 
@@ -147,8 +147,8 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
     if (mostrarDados)
     {
       printf("\n\nPessoa: %s", raizPtr->nome);
-      printf("\nPai-> %s", (raizPtr->Pai != NULL) ? raizPtr->Pai->nome : "<-Sem dados->");
-      printf("\nMae-> %s", (raizPtr->Mae != NULL) ? raizPtr->Mae->nome : "<-Sem dados->");
+      printf("\nPai-> %s", (raizPtr->Pai != NULL) ? raizPtr->Pai->nome : "//Sem dados");
+      printf("\nMae-> %s", (raizPtr->Mae != NULL) ? raizPtr->Mae->nome : "//Sem dados->");
 
       if (raizPtr->irmaos != NULL && raizPtr->irmaos->front != -1)
       {
@@ -172,8 +172,8 @@ Pessoa *buscarPessoaEspecifica(Pessoa *raiz, char nomeBusca[49], int mostrarDado
         if (mostrarDados)
         {
           printf("\n\nPessoa: %s", raizPtr->irmaos->nomeIrmao[i]);
-          printf("\nPai-> %s", raizPtr->Pai->nome);
-          printf("\nMae-> %s", raizPtr->Mae->nome);
+          printf("\nPai-> %s", (raizPtr->Pai != NULL) ? raizPtr->Pai->nome : "//Sem dados");
+          printf("\nMae-> %s", (raizPtr->Mae != NULL) ? raizPtr->Mae->nome : "//Sem dados->");
           printf("\nIrmaos-> ");
           printf("%s", raizPtr->nome);
 
@@ -267,10 +267,10 @@ void editarPessoa(Pessoa *pessoa)
 {
   if (pessoa == NULL)
   {
-    printf("\nPessoa nao encontrada");
+    printf("\n<-- Pessoa nao encontrada -->");
     return;
   }
-
+  criarAcao(pessoa, 1);
   int escolha = 0;
   Pessoa *pessoaPtr = pessoa;
 
@@ -296,10 +296,6 @@ void editarPessoa(Pessoa *pessoa)
       processarString(pessoaPtr->Pai->nome);
     }
   }
-  else
-  {
-    printf("\nNao ha pai registrado");
-  }
 
   if (pessoaPtr->Mae != NULL)
   {
@@ -312,10 +308,6 @@ void editarPessoa(Pessoa *pessoa)
       fgets(pessoaPtr->Mae->nome, 50, stdin);
       processarString(pessoaPtr->Mae->nome);
     }
-  }
-  else
-  {
-    printf("\nNao ha Mae registrado");
   }
 
   if (pessoaPtr->irmaos != NULL && pessoaPtr->irmaos->front != -1)
@@ -338,10 +330,24 @@ void editarPessoa(Pessoa *pessoa)
       }
     }
   }
-  else
+}
+void excluirPessoa(Pessoa *pessoa)
+{
+  if (raizPilhaOp->topo >= MAXOPR - 1)
   {
-    printf("\nNao ha irmaos registrados");
+    printf("\n<-- Limite de Historico de operacoes atingifo -->");
+    return;
   }
+  if (pessoa == NULL)
+  {
+    printf("\n<-- Pessoa nao encontrada -->");
+    return;
+  }
+
+  pessoa->Pai = NULL;
+  pessoa->Mae = NULL;
+  pessoa->irmaos = NULL;
+  pessoa->nome[0] = '\0';
 }
 
 Pessoa *encontrarUltimoNomePai(Pessoa *raiz)
@@ -424,10 +430,12 @@ int main()
     printf("\n2 - Adicionar Pessoa");
     printf("\n3 - Imprimir Arvore Genealogica");
     printf("\n4 - BUSCAR Dados Pessoa Especifica");
-    printf("\n5 - EDITAR Dados Pessoa Especifica");
-    printf("\n6 - Desfazer Acao");
+    printf("\n5 - EDITAR Dados/Parentes Pessoa Especifica");
+    printf("\n6 - EXCLUIR Dados Pessoa Especifica");
     if (cadastrouPrimeira)
     {
+      printf("\n8 - Desfazer Acao <-");
+      printf("\n9 - Refazer Acao  ->");
       printf("\n\n-- Recomendações --");
       printf("\n10 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz)->nome);
       printf("\n11 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz)->nome);
@@ -444,10 +452,6 @@ int main()
       getchar();
       adicionarPessoa(raiz, cadastrouPrimeira);
       cadastrouPrimeira = 1;
-      if (!cadastrouPrimeira)
-      {
-        PilhaOperacoes *pilhaOperacoes = malloc(sizeof(PilhaOperacoes));
-      }
       break;
     case 3:
       imprimirArvore(raiz);
@@ -461,15 +465,23 @@ int main()
       break;
     case 5:
       getchar();
-      nomeBusca[0] = '\0';
       printf("\nInsira o nome da pessoa para editar: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
       editarPessoa(buscarPessoaEspecifica(raiz, nomeBusca, 0));
       break;
     case 6:
+      getchar();
+      printf("\nInsira o nome da pessoa para excluir: ");
+      fgets(nomeBusca, 50, stdin);
+      processarString(nomeBusca);
+      excluirPessoa(buscarPessoaEspecifica(raiz, nomeBusca, 0));
+
+      break;
+    case 8:
       desfazerAcao();
       break;
+
     case 10:
       getchar();
       adicionarPessoa(encontrarUltimoNomePai(raiz), cadastrouPrimeira);
