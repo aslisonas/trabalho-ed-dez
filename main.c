@@ -115,22 +115,22 @@ void desfazerAcao()
   case 1:
     printf("\nPessoa ' %s ' retornada para ' %s '", raizPilhaOp->operacao[topo]->pessoaQueEra->nome, raizPilhaOp->operacao[topo]->copiaOldDados->nome);
     memcpy(raizPilhaOp->operacao[topo]->pessoaQueEra, raizPilhaOp->operacao[topo]->copiaOldDados, sizeof(Pessoa));
-
     if (raizPilhaOp->operacao[topo]->pessoaQueEra->Pai != NULL)
     {
       strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Pai->nome, raizPilhaOp->operacao[topo]->copiaOldDados->Pai->nome);
     }
-
     if (raizPilhaOp->operacao[topo]->pessoaQueEra->Mae != NULL)
     {
       strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Mae->nome, raizPilhaOp->operacao[topo]->copiaOldDados->Mae->nome);
     }
 
-    break;
+    free(raizPilhaOp->operacao[topo]->copiaOldDados);
 
+    break;
   default:
     break;
   }
+  free(raizPilhaOp->operacao[topo]);
   raizPilhaOp->topo--;
 }
 
