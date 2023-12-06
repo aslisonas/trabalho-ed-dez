@@ -444,36 +444,60 @@ void imprimirArvore(Pessoa *raiz)
     }
   }
 }
-void miniImprimirArvore(Pessoa *Pessoa)
+void miniImprimirArvore(Pessoa *raiz)
 {
-  if (Pessoa == NULL)
+  if (raiz == NULL)
   {
     return;
   }
-
-  // MINI IMPRIMIR FILHOS E IRMAOS
-  printf("\n(%s", Pessoa->nome);
-  filaIrmaos *irmaos = Pessoa->irmaos;
-  if (irmaos != NULL && irmaos->front != -1)
+  Pessoa *pessoaAtual;
+  filaIrmaos *fila = NULL;
+  while (raiz != NULL || fila != NULL)
   {
-    for (int i = 0; i <= irmaos->rear; i++)
+    while (raiz != NULL)
     {
-      printf(", %s", irmaos->nomeIrmao[i]);
+      printf("\n(%s", raiz->nome);
+
+      fila = raiz->irmaos;
+      if (fila != NULL && fila->front != -1)
+      {
+        for (int i = 0; i <= fila->rear; i++)
+        {
+          printf(", %s", fila->nomeIrmao[i]);
+        }
+      }
+      printf(")");
+      if (raiz->Pai != NULL)
+      {
+        printf("-> Pai: %s;", raiz->Pai->nome);
+      }
+      if (raiz->Mae != NULL)
+      {
+        printf(" Mae: %s", raiz->Mae->nome);
+      }
+
+      if (raiz->Pai != NULL)
+      {
+        raiz = raiz->Pai;
+      }
+      else
+      {
+        raiz = raiz->Mae;
+      }
+    }
+    if (fila != NULL)
+    {
+      if (fila->front != -1)
+      {
+        raiz = raiz;
+      }
+      else
+      {
+        raiz = NULL;
+      }
+      fila = NULL;
     }
   }
-  printf(")");
-
-  // MINIIMPRIMIR PAI E MAE
-  if (Pessoa->Pai != NULL)
-  {
-    printf("-> Pai: %s;", Pessoa->Pai->nome);
-  }
-  if (Pessoa->Mae != NULL)
-  {
-    printf(" Mae: %s", Pessoa->Mae->nome);
-  }
-  imprimirArvore(Pessoa->Pai);
-  imprimirArvore(Pessoa->Mae);
 }
 
 int main()
