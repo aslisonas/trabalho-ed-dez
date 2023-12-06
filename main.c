@@ -387,38 +387,62 @@ Pessoa *encontrarUltimoNomeMae(Pessoa *raiz)
   return raiz;
 }
 
-void imprimirArvore(Pessoa *Pessoa)
+void imprimirArvore(Pessoa *raiz)
 {
-  if (Pessoa == NULL)
+  if (raiz == NULL)
   {
     return;
   }
 
-  // IMPRIMIR FILHOS E IRMAOS
+  Pessoa *pessoaAtual;
+  filaIrmaos *fila = NULL;
 
-  printf("\n\n(%s", Pessoa->nome);
-
-  filaIrmaos *irmaos = Pessoa->irmaos;
-  if (irmaos != NULL && irmaos->front != -1)
+  while (raiz != NULL || fila != NULL)
   {
-    for (int i = 0; i <= irmaos->rear; i++)
+    while (raiz != NULL)
     {
-      printf(", %s", irmaos->nomeIrmao[i]);
+      printf("\n\n(%s", raiz->nome);
+
+      fila = raiz->irmaos;
+      if (fila != NULL && fila->front != -1)
+      {
+        for (int i = 0; i <= fila->rear; i++)
+        {
+          printf(", %s", fila->nomeIrmao[i]);
+        }
+      }
+      printf(")");
+
+      if (raiz->Pai != NULL)
+      {
+        printf("\nPai-> %s", raiz->Pai->nome);
+      }
+      if (raiz->Mae != NULL)
+      {
+        printf("\nMae-> %s", raiz->Mae->nome);
+      }
+
+      if (raiz->Pai != NULL)
+      {
+        imprimirArvore(raiz->Pai);
+      }
+
+      raiz = raiz->Mae;
+    }
+
+    if (fila != NULL)
+    {
+      if (fila->front != -1)
+      {
+        raiz = raiz;
+      }
+      else
+      {
+        raiz = NULL;
+      }
+      fila = NULL;
     }
   }
-  printf(")");
-
-  // IMPRIMIR PAI E MAE
-  if (Pessoa->Pai != NULL)
-  {
-    printf("\nPai-> %s", Pessoa->Pai->nome);
-  }
-  if (Pessoa->Mae != NULL)
-  {
-    printf("\nMae-> %s", Pessoa->Mae->nome);
-  }
-  imprimirArvore(Pessoa->Pai);
-  imprimirArvore(Pessoa->Mae);
 }
 void miniImprimirArvore(Pessoa *Pessoa)
 {
