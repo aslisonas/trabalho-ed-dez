@@ -57,8 +57,9 @@ typedef struct Operacao
   Pessoa *copiaOldDados;
   Pessoa *pessoaQueEra;
   int tipoOperacao;
+  char oldPaiNome[50];
+  char oldMaeNome[50];
 } Operacao;
-
 typedef struct PilhaOperacoes
 {
   Operacao *operacao[MAXOPR];
@@ -91,13 +92,20 @@ void criarAcao(Pessoa *pessoa, int tipoOp)
 
   raizPilhaOp->topo++;
   int topo = raizPilhaOp->topo;
-
   raizPilhaOp->operacao[topo] = malloc(sizeof(Operacao));
-
   raizPilhaOp->operacao[topo]->tipoOperacao = tipoOp;
 
   raizPilhaOp->operacao[topo]->copiaOldDados = criarNoPessoa();
   memcpy(raizPilhaOp->operacao[topo]->copiaOldDados, pessoa, sizeof(Pessoa));
+
+  if (pessoa->Pai != NULL)
+  {
+    strcpy(raizPilhaOp->operacao[topo]->oldPaiNome, pessoa->Pai->nome);
+  }
+  if (pessoa->Mae != NULL)
+  {
+    strcpy(raizPilhaOp->operacao[topo]->oldMaeNome, pessoa->Mae->nome);
+  }
 
   raizPilhaOp->operacao[topo]->pessoaQueEra = pessoa;
 }
@@ -113,24 +121,31 @@ void desfazerAcao()
   switch (tipoOp)
   {
   case 1:
-    printf("\nPessoa ' %s ' retornada para ' %s '", raizPilhaOp->operacao[topo]->pessoaQueEra->nome, raizPilhaOp->operacao[topo]->copiaOldDados->nome);
+    // Checar se nome oriiginal da pessoa mudou
+    if (strcmp(raizPilhaOp->operacao[topo]->pessoaQueEra->nome, raizPilhaOp->operacao[topo]->copiaOldDados->nome))
+    {
+      printf("Nome de ' %s ' retornado para ' %s '", raizPilhaOp->operacao[topo]->pessoaQueEra->nome, raizPilhaOp->operacao[topo]->copiaOldDados->nome);
+    };
+
     memcpy(raizPilhaOp->operacao[topo]->pessoaQueEra, raizPilhaOp->operacao[topo]->copiaOldDados, sizeof(Pessoa));
+
     if (raizPilhaOp->operacao[topo]->pessoaQueEra->Pai != NULL)
     {
-      strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Pai->nome, raizPilhaOp->operacao[topo]->copiaOldDados->Pai->nome);
+      printf("Nome de ' %s ' retornado para ' %s '", raizPilhaOp->operacao[topo]->oldPaiNome, raizPilhaOp->operacao[topo]->pessoaQueEra->Pai->nome);
+      strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Pai->nome, raizPilhaOp->operacao[topo]->oldPaiNome);
     }
     if (raizPilhaOp->operacao[topo]->pessoaQueEra->Mae != NULL)
     {
-      strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Mae->nome, raizPilhaOp->operacao[topo]->copiaOldDados->Mae->nome);
+      printf("Nome de ' %s ' retornado para ' %s '", raizPilhaOp->operacao[topo]->oldMaeNome, raizPilhaOp->operacao[topo]->pessoaQueEra->Mae->nome);
+      strcpy(raizPilhaOp->operacao[topo]->pessoaQueEra->Mae->nome, raizPilhaOp->operacao[topo]->oldMaeNome);
     }
-
-    free(raizPilhaOp->operacao[topo]->copiaOldDados);
 
     break;
   default:
     break;
   }
-  free(raizPilhaOp->operacao[topo]);
+
+  free(raizPilhaOp->operacao[topo]->copiaOldDados);
   raizPilhaOp->topo--;
 }
 
@@ -469,11 +484,11 @@ void miniImprimirArvore(Pessoa *raiz)
       printf(")");
       if (raiz->Pai != NULL)
       {
-        printf("-> Pai: %s;", raiz->Pai->nome);
+        printf("-> Pai: (%s);", raiz->Pai->nome);
       }
       if (raiz->Mae != NULL)
       {
-        printf(" Mae: %s", raiz->Mae->nome);
+        printf(" Mae: (%s)", raiz->Mae->nome);
       }
 
       if (raiz->Pai != NULL)
@@ -524,7 +539,6 @@ int main()
     if (cadastrouPrimeira && raiz->nome[0] != '\0')
     {
       printf("\n\n8 - Desfazer Acao <-");
-      printf("\n9 - Refazer Acao  ->");
       printf("\n\n-- Recomendações --");
       printf("\n10 - Acrescentar antecedentes de (%s)", encontrarUltimoNomePai(raiz)->nome);
       printf("\n11 - Acrescentar antecedentes de (%s)", encontrarUltimoNomeMae(raiz)->nome);
@@ -545,6 +559,7 @@ int main()
       }
       else
       {
+        miniImprimirArvore(raiz);
         printf("\nInsira o nome da pessoa para buscar e adicionar parentes: ");
         fgets(nomeBusca, 50, stdin);
         processarString(nomeBusca);
@@ -557,6 +572,7 @@ int main()
       break;
     case 4:
       getchar();
+      miniImprimirArvore(raiz);
       printf("\nInsira o nome da pessoa para busca: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
@@ -564,6 +580,7 @@ int main()
       break;
     case 5:
       getchar();
+      miniImprimirArvore(raiz);
       printf("\nInsira o nome da pessoa para editar: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
@@ -571,6 +588,7 @@ int main()
       break;
     case 6:
       getchar();
+      miniImprimirArvore(raiz);
       printf("\nInsira o nome da pessoa para excluir: ");
       fgets(nomeBusca, 50, stdin);
       processarString(nomeBusca);
@@ -578,10 +596,6 @@ int main()
       break;
     case 8:
       desfazerAcao();
-      break;
-    case 9:
-      // refazerAcao();
-      miniImprimirArvore(raiz);
       break;
     case 10:
       getchar();
@@ -591,11 +605,12 @@ int main()
       getchar();
       adicionarPessoa(encontrarUltimoNomeMae(raiz), cadastrouPrimeira);
       break;
+    // apenas para testes e desenvolvimento
     case 12:
       strcpy(raiz->nome, "Alison Pereira");
       processarString(raiz->nome);
       raiz->Pai = criarNoPessoa();
-      strcpy(raiz->Pai->nome, "Antonio Silva");
+      strcpy(raiz->Pai->nome, "Lucas Mikeyas");
       processarString(raiz->Pai->nome);
       raiz->Mae = criarNoPessoa();
       strcpy(raiz->Mae->nome, "Maria Silva");
